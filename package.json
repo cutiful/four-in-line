@@ -1,0 +1,42 @@
+{
+  "name": "four-in-line",
+  "version": "1.0.0",
+  "description": "Four-in-line game on cavas",
+  "main": "src/main.js",
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-replace": "^2.3.1",
+    "local-web-server": "^4.0.0",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^2.1.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-workbox-inject": "^1.0.1"
+  },
+  "scripts": {
+    "start": "npm-run-all --parallel serve watch",
+    "watch": "rollup -c -w",
+    "build": "rollup -c",
+    "serve": "ws -d public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cutiful/four-in-line.git"
+  },
+  "keywords": [
+    "four-in-line",
+    "canvas",
+    "game"
+  ],
+  "author": "cutiful",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cutiful/four-in-line/issues"
+  },
+  "homepage": "https://github.com/cutiful/four-in-line#readme",
+  "dependencies": {
+    "workbox-precaching": "^5.1.1"
+  }
+}

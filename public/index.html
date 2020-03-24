@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Four-in-Line</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <style>
+      body, html {
+        box-sizing: border-box;
+        height: 100%;
+        margin: 0;
+        background: #82daff;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      .subcontainer {
+        box-sizing: border-box;
+        max-width: 600px;
+        width: 100%;
+      }
+
+      #game {
+        box-shadow: #8888ee77 0 0 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="subcontainer">
+        <canvas id="game"></canvas>
+      </div>
+    </div>
+
+    <script>
+      try {
+        import("./bundle.js");
+        window.haveDynamicImport = true;
+      } catch(e) {
+        console.log(e);
+      }
+    </script>
+    <script>
+      if (!window.haveDynamicImport) {
+        const systemJsLoaderTag = document.createElement("script");
+        systemJsLoaderTag.src = "https://unpkg.com/systemjs@2.0.0/dist/s.min.js";
+        systemJsLoaderTag.addEventListener("load", function () {
+          System.import("./bundle-noimport.js");
+        });
+
+        document.head.appendChild(systemJsLoaderTag);
+      }
+    </script>
+  </body>
+</html>
