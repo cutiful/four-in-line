@@ -13,6 +13,8 @@ canvasEl.height = height;
 
 const circles = [];
 let selectedColumn = 0;
+let currentMove = 1;
+let active = true;
 
 for (let i = 0; i < rows; i++) {
   const row = [];
@@ -30,10 +32,8 @@ const draw = () => {
   if (selectedColumn > 0)
     highlightColumn(ctx, width, height, selectedColumn);
 
-  drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
+  drawCircles(ctx, width, height, circles);
 };
-
-draw();
 
 canvasEl.addEventListener("mousemove", e => {
   const column = Math.ceil(e.offsetX / (width / columns));
@@ -47,3 +47,19 @@ canvasEl.addEventListener("mouseleave", e => {
   selectedColumn = 0;
   draw();
 });
+
+canvasEl.addEventListener("click", e => {
+  if (!active) return;
+
+  for (let i = circles.length - 1; i >= 0; i--) {
+    if (circles[i][selectedColumn - 1]) continue;
+
+    circles[i][selectedColumn - 1] = currentMove;
+    currentMove = currentMove === 1 ? 2 : 1;
+    break;
+  }
+
+  draw();
+});
+
+draw();
