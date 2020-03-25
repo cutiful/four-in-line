@@ -19,6 +19,7 @@ let active = true;
 
 const reset = () => {
   currentMove = 1;
+  active = true;
 
   for (let i = 0, l = circles.length; i < l; i++) {
     circles.pop();
@@ -68,11 +69,21 @@ canvasEl.addEventListener("click", e => {
 
     const wins = checkWinningCombinations(circles);
     if (wins) {
-      alert(`Team ${wins} wins!`);
-      reset();
+      draw();
+      active = false;
+
+      setTimeout(() => {
+        alert(`Team ${wins} wins!`);
+        reset();
+      }, 500);
     } else if (!checkAvailableMoves(circles)) {
-      alert("No moves left, it's a draw!");
-      reset();
+      draw();
+      active = false;
+
+      setTimeout(() => {
+        alert("No moves left, it's a draw!");
+        reset();
+      }, 500);
     }
 
     break;
