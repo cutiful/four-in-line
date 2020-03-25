@@ -1,5 +1,4 @@
-export const rows = 6;
-export const columns = 7;
+import { rows, columns } from "./config.js";
 
 export function drawBorders(ctx, width, height) {
   ctx.save();
