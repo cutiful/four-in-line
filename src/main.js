@@ -1,4 +1,4 @@
-import { fillField, drawBorders } from "./field.js";
+import { fillField, drawBorders, highlightColumn } from "./field.js";
 import { drawCircles } from "./circles.js";
 import { rows, columns } from "./config.js";
 
@@ -29,12 +29,7 @@ const draw = () => {
   drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
 
   if (selectedColumn > 0) {
-    ctx.save();
-
-    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-    ctx.fillRect(width / columns * (selectedColumn - 1), 0, width / columns, height);
-
-    ctx.restore();
+    highlightColumn(ctx, width, height, selectedColumn);
   }
 };
 

@@ -28,3 +28,12 @@ export function drawBorders(ctx, width, height) {
 
   ctx.restore();
 }
+
+export function highlightColumn(ctx, width, height, column) {
+    ctx.save();
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.fillRect(width / columns * (column - 1), 0, width / columns, height);
+
+    ctx.restore();
+}
