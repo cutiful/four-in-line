@@ -7,6 +7,10 @@ const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
   ctx = canvasEl.getContext("2d"); 
 
+const hasHover = !("ontouchstart" in document.documentElement ||
+  navigator.maxTouchPoints > 0 ||
+  navigator.msMaxTouchPoints > 0);
+
 let width = containerEl.clientWidth,
   height = width / columns * rows; // containerEl.clientHeight;
 canvasEl.width = width;
@@ -39,7 +43,7 @@ const draw = () => {
   fillField(ctx, width, height);
   drawBorders(ctx, width, height);
 
-  if (selectedColumn > 0)
+  if (selectedColumn > 0 && hasHover)
     highlightColumn(ctx, width, height, selectedColumn);
 
   drawCircles(ctx, width, height, circles);
