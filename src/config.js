@@ -4,7 +4,7 @@ const columns = 7;
 const circleOffset = 8;
 
 const alphaColor = "#2093ff";
-const betaColor = "#40ffb9";
+const betaColor = "#66e2d8";
 
 export {
   rows,

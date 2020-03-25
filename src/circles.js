@@ -15,6 +15,15 @@ export function drawCircles(ctx, width, height, circles) {
       ctx.beginPath();
       ctx.arc(width / columns * (circle + 0.5), height / rows * (row + 0.5), width / columns / 2 - circleOffset, 0, 2 * Math.PI, false);
       ctx.fill();
+
+      const oldCompositeOperation = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = "multiply";
+
+      ctx.beginPath();
+      ctx.arc(width / columns * (circle + 0.5), height / rows * (row + 0.5), width / columns / 2 - circleOffset - 4, 0, 2 * Math.PI, false);
+      ctx.fill();
+
+      ctx.globalCompositeOperation = oldCompositeOperation;
     }
   }
 
