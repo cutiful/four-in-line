@@ -61,7 +61,7 @@ export function animateCircle(ctx, width, height, row, column, team, draw, onCom
 
   const x = width / columns * (column + 0.5),
     targetY = height / rows * (row + 0.5),
-    speed = 1000;
+    speed = height * 3;
 
   const func = time => {
     let diff;
