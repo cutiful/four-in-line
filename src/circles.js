@@ -30,3 +30,64 @@ export function drawCircles(ctx, width, height, circles) {
 
   ctx.restore();
 }
+
+export function drawCircle(ctx, width, height, x, y, team) {
+  ctx.save();
+
+  const rad = width / columns / 2 - circleOffset;
+  const grad = ctx.createRadialGradient(x - 5, y - 5, rad / 2.5, x, y, rad);
+
+  if (team === 1) {
+    grad.addColorStop(0, alphaColor1);
+    grad.addColorStop(1, alphaColor2);
+  } else {
+    grad.addColorStop(0, betaColor1);
+    grad.addColorStop(1, betaColor2);
+  }
+
+  ctx.fillStyle = grad;
+
+  ctx.beginPath();
+  ctx.arc(x, y, rad, 0, 2 * Math.PI, false);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+export function animateCircle(ctx, width, height, row, column, team, draw, onComplete) {
+  let ts = 0,
+    y = 0,
+    done = false;
+
+  const x = width / columns * (column + 0.5),
+    targetY = height / rows * (row + 0.5),
+    speed = 1000;
+
+  const func = time => {
+    let diff;
+
+    if (ts === 0) {
+      diff = 0;
+      ts = time;
+    } else {
+      diff = time - ts;
+      ts = time;
+    }
+
+    y += diff / 1000 * speed;
+    if (y >= targetY) {
+      y = targetY;
+      done = true;
+    }
+
+    draw();
+    drawCircle(ctx, width, height, x, y, team);
+
+    if (!done)
+      window.requestAnimationFrame(func);
+    else
+      onComplete();
+  };
+
+  window.requestAnimationFrame(func);
+}

@@ -1,5 +1,5 @@
 import { fillField, drawBorders, highlightColumn } from "./field.js";
-import { drawCircles } from "./circles.js";
+import { drawCircles, animateCircle } from "./circles.js";
 import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
 
@@ -61,30 +61,36 @@ canvasEl.addEventListener("mouseleave", e => {
 canvasEl.addEventListener("click", e => {
   if (!active) return;
 
+  const col = selectedColumn - 1;
   for (let i = circles.length - 1; i >= 0; i--) {
-    if (circles[i][selectedColumn - 1]) continue;
+    if (circles[i][col]) continue;
 
-    circles[i][selectedColumn - 1] = currentMove;
-    currentMove = currentMove === 1 ? 2 : 1;
+    active = false;
+    animateCircle(ctx, width, height, i, col, currentMove, draw, () => {
+      circles[i][col] = currentMove;
+      currentMove = currentMove === 1 ? 2 : 1;
 
-    const wins = checkWinningCombinations(circles);
-    if (wins) {
-      draw();
-      active = false;
+      const wins = checkWinningCombinations(circles);
+      if (wins) {
+        draw();
+        active = false;
 
-      setTimeout(() => {
-        alert(`Team ${wins} wins!`);
-        reset();
-      }, 500);
-    } else if (!checkAvailableMoves(circles)) {
-      draw();
-      active = false;
+        setTimeout(() => {
+          alert(`Team ${wins} wins!`);
+          reset();
+        }, 500);
+      } else if (!checkAvailableMoves(circles)) {
+        draw();
+        active = false;
 
-      setTimeout(() => {
-        alert("No moves left, it's a draw!");
-        reset();
-      }, 500);
-    }
+        setTimeout(() => {
+          alert("No moves left, it's a draw!");
+          reset();
+        }, 500);
+      } else {
+        active = true;
+      }
+    });
 
     break;
   }
