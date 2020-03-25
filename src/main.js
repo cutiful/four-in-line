@@ -1,6 +1,7 @@
 import { fillField, drawBorders, highlightColumn } from "./field.js";
 import { drawCircles } from "./circles.js";
 import { rows, columns } from "./config.js";
+import { checkWinningCombinations } from "./rules.js";
 
 const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
@@ -16,14 +17,22 @@ let selectedColumn = 0;
 let currentMove = 1;
 let active = true;
 
-for (let i = 0; i < rows; i++) {
-  const row = [];
-  for (let i = 0; i < columns; i++) {
-    row.push(0);
+const reset = () => {
+  currentMove = 1;
+
+  for (let i = 0, l = circles.length; i < l; i++) {
+    circles.pop();
   }
 
-  circles.push(row);
-}
+  for (let i = 0; i < rows; i++) {
+    const row = [];
+    for (let i = 0; i < columns; i++) {
+      row.push(0);
+    }
+
+    circles.push(row);
+  }
+};
 
 const draw = () => {
   fillField(ctx, width, height);
@@ -56,10 +65,18 @@ canvasEl.addEventListener("click", e => {
 
     circles[i][selectedColumn - 1] = currentMove;
     currentMove = currentMove === 1 ? 2 : 1;
+
+    const wins = checkWinningCombinations(circles);
+    if (wins) {
+      alert(`Team ${wins} wins!`);
+      reset();
+    }
+
     break;
   }
 
   draw();
 });
 
+reset();
 draw();
