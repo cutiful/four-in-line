@@ -1,4 +1,4 @@
-import { rows, columns, alphaColor, betaColor } from "./config.js";
+import { rows, columns, alphaColor, betaColor, circleOffset } from "./config.js";
 
 export function drawCircles(ctx, width, height, circles) {
   ctx.save();
@@ -13,7 +13,7 @@ export function drawCircles(ctx, width, height, circles) {
         ctx.fillStyle = betaColor;
 
       ctx.beginPath();
-      ctx.arc(width / columns * (circle + 0.5), height / rows * (row + 0.5), width / columns / 2, 0, 2 * Math.PI, false);
+      ctx.arc(width / columns * (circle + 0.5), height / rows * (row + 0.5), width / columns / 2 - circleOffset, 0, 2 * Math.PI, false);
       ctx.fill();
     }
   }
