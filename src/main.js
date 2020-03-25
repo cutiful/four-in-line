@@ -73,23 +73,24 @@ canvasEl.addEventListener("click", e => {
     animateCircle(ctx, width, height, i, col, currentMove, draw, () => {
       circles[i][col] = currentMove;
       currentMove = currentMove === 1 ? 2 : 1;
+      draw();
 
       const wins = checkWinningCombinations(circles);
       if (wins) {
-        draw();
         active = false;
 
         setTimeout(() => {
           alert(`Team ${wins} wins!`);
           reset();
+          draw();
         }, 500);
       } else if (!checkAvailableMoves(circles)) {
-        draw();
         active = false;
 
         setTimeout(() => {
           alert("No moves left, it's a draw!");
           reset();
+          draw();
         }, 500);
       } else {
         active = true;
@@ -98,8 +99,6 @@ canvasEl.addEventListener("click", e => {
 
     break;
   }
-
-  draw();
 });
 
 reset();
