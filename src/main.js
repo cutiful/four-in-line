@@ -1,4 +1,4 @@
-import { drawBorders } from "./field.js";
+import { fillField, drawBorders } from "./field.js";
 import { drawCircles } from "./circles.js";
 import { rows, columns } from "./config.js";
 
@@ -11,10 +11,44 @@ let width = containerEl.clientWidth,
 canvasEl.width = width;
 canvasEl.height = height;
 
-ctx.save();
-ctx.fillStyle = "#ddebff";
-ctx.fillRect(0, 0, width, height);
-ctx.restore();
+const circles = [];
+let selectedColumn = 0;
 
-drawBorders(ctx, width, height);
-drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
+for (let i = 0; i < rows; i++) {
+  const row = [];
+  for (let i = 0; i < columns; i++) {
+    row.push(0);
+  }
+
+  circles.push(row);
+}
+
+const draw = () => {
+  fillField(ctx, width, height);
+  drawBorders(ctx, width, height);
+  drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
+
+  if (selectedColumn > 0) {
+    ctx.save();
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.fillRect(width / columns * (selectedColumn - 1), 0, width / columns, height);
+
+    ctx.restore();
+  }
+};
+
+draw();
+
+canvasEl.addEventListener("mousemove", e => {
+  const column = Math.ceil(e.offsetX / (width / columns));
+  if (column !== selectedColumn) {
+    selectedColumn = column;
+    draw();
+  }
+});
+
+canvasEl.addEventListener("mouseleave", e => {
+  selectedColumn = 0;
+  draw();
+});

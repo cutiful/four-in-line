@@ -1,5 +1,14 @@
 import { rows, columns } from "./config.js";
 
+export function fillField(ctx, width, height) {
+  ctx.save();
+
+  ctx.fillStyle = "#ddebff";
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.restore();
+}
+
 export function drawBorders(ctx, width, height) {
   ctx.save();
 
