@@ -26,11 +26,11 @@ for (let i = 0; i < rows; i++) {
 const draw = () => {
   fillField(ctx, width, height);
   drawBorders(ctx, width, height);
-  drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
 
-  if (selectedColumn > 0) {
+  if (selectedColumn > 0)
     highlightColumn(ctx, width, height, selectedColumn);
-  }
+
+  drawCircles(ctx, width, height, [[1, 0, 1, 1, 0, 0], [0, 1, 0, 2, 1, 2]]);
 };
 
 draw();

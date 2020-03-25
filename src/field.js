@@ -30,10 +30,21 @@ export function drawBorders(ctx, width, height) {
 }
 
 export function highlightColumn(ctx, width, height, column) {
-    ctx.save();
+  ctx.save();
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-    ctx.fillRect(width / columns * (column - 1), 0, width / columns, height);
+  const x = width / columns * (column - 1);
+  const y = 0;
+  const w = width / columns;
+  const h = height;
 
-    ctx.restore();
+  const grad = ctx.createLinearGradient(x, 0, x + w, 0);
+  grad.addColorStop(0, "rgba(255, 255, 255, 0.5)");
+  grad.addColorStop(0.4, "rgba(255, 255, 255, 0)");
+  grad.addColorStop(0.6, "rgba(255, 255, 255, 0)");
+  grad.addColorStop(1, "rgba(255, 255, 255, 0.5)");
+
+  ctx.fillStyle = grad;
+  ctx.fillRect(x, y, w, h);
+
+  ctx.restore();
 }
