@@ -117,3 +117,14 @@ export function checkWinningCombinations(circles) {
 
   return 0;
 }
+
+export function checkAvailableMoves(circles) {
+  for (let i = 0; i < circles.length; i++) {
+    for (let j = 0; j < circles[i].length; j++) {
+      if (circles[i][j] === 0)
+        return true;
+    }
+  }
+
+  return false;
+}

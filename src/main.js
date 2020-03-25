@@ -1,7 +1,7 @@
 import { fillField, drawBorders, highlightColumn } from "./field.js";
 import { drawCircles } from "./circles.js";
 import { rows, columns } from "./config.js";
-import { checkWinningCombinations } from "./rules.js";
+import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
 
 const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
@@ -69,6 +69,9 @@ canvasEl.addEventListener("click", e => {
     const wins = checkWinningCombinations(circles);
     if (wins) {
       alert(`Team ${wins} wins!`);
+      reset();
+    } else if (!checkAvailableMoves(circles)) {
+      alert("No moves left, it's a draw!");
       reset();
     }
 
