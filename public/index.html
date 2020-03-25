@@ -50,6 +50,7 @@
         const systemJsLoaderTag = document.createElement("script");
         systemJsLoaderTag.src = "https://unpkg.com/systemjs@2.0.0/dist/s.min.js";
         systemJsLoaderTag.addEventListener("load", function () {
+          document.head.removeChild(systemJsLoaderTag);
           System.import("./bundle-noimport.js");
         });
 
