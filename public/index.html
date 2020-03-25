@@ -30,7 +30,7 @@
       }
 
       #game {
-        box-shadow: #8888ee77 0 0 20px 0;
+        box-shadow: rgba(136, 136, 238, 0.4666666666666667) 0 0 20px 0;
       }
     </style>
   </head>
@@ -42,12 +42,8 @@
     </div>
 
     <script>
-      try {
-        import("./bundle.js");
-        window.haveDynamicImport = true;
-      } catch(e) {
-        console.log(e);
-      }
+      import("./bundle.js");
+      window.haveDynamicImport = true;
     </script>
     <script>
       if (!window.haveDynamicImport) {
