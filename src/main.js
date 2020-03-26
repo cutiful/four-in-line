@@ -2,7 +2,7 @@ import { fillField, drawBorders, highlightColumn } from "./field.js";
 import { drawCircles, animateCircle } from "./circles.js";
 import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
-import { drawWinnerScreen } from "./winner.js";
+import { drawWinnerScreen, drawText } from "./winner.js";
 
 const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
@@ -64,6 +64,20 @@ const win = team => {
   canvasEl.addEventListener("click", clickListener);
 };
 
+const noMoves = () => {
+  drawText(ctx, width, height, "No moves left!", 32, "white", "black");
+
+  const clickListener = e => {
+    canvasEl.removeEventListener("click", clickListener);
+
+    reset();
+    draw();
+    active = true;
+  };
+
+  canvasEl.addEventListener("click", clickListener);
+};
+
 canvasEl.addEventListener("mousemove", e => {
   const column = Math.ceil(e.offsetX / (width / columns));
   if (column !== selectedColumn) {
@@ -95,17 +109,12 @@ canvasEl.addEventListener("click", e => {
       draw();
 
       const wins = checkWinningCombinations(circles);
-      if (wins) {
+      if (wins)
         win(wins);
-      } else if (!checkAvailableMoves(circles)) {
-        setTimeout(() => {
-          alert("No moves left, it's a draw!");
-          reset();
-          draw();
-        }, 500);
-      } else {
+      else if (!checkAvailableMoves(circles))
+        noMoves();
+      else
         active = true;
-      }
     });
 
     break;
