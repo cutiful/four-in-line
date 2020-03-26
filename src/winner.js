@@ -1,7 +1,8 @@
 import { alphaColor2, betaColor2 } from "./config.js";
+import { getLargeTextSize } from "./screens.js";
 
 export function drawWinnerScreen(ctx, width, height, team) {
-  drawText(ctx, width, height, `Team ${team} wins!`, 48, "white", team === 1 ? alphaColor2 : betaColor2);
+  drawText(ctx, width, height, `Team ${team} wins!`, getLargeTextSize(width), "white", team === 1 ? alphaColor2 : betaColor2);
 }
 
 export function drawText(ctx, width, height, text, size, color, background) {
