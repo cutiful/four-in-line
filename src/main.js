@@ -68,12 +68,16 @@ canvasEl.addEventListener("mousemove", e => {
   const column = Math.ceil(e.offsetX / (width / columns));
   if (column !== selectedColumn) {
     selectedColumn = column;
+    if (!active) return;
+
     draw();
   }
 });
 
 canvasEl.addEventListener("mouseleave", e => {
   selectedColumn = 0;
+  if (!active) return;
+
   draw();
 });
 
