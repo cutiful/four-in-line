@@ -34,6 +34,10 @@ export function showHelp(canvasEl, ctx, width, height, text, size) {
       }
 
       fits--;
+
+      let lastSpace = line.slice(0, fits).lastIndexOf(" ");
+      if (lastSpace !== -1)
+        fits = lastSpace;
     }
   }
 
