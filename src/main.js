@@ -2,7 +2,7 @@ import { fillField, drawBorders, highlightColumn } from "./field.js";
 import { drawCircles, animateCircle } from "./circles.js";
 import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
-import { drawWinnerScreen, drawText } from "./winner.js";
+import { drawWinnerScreen, drawText } from "./text.js";
 
 const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
