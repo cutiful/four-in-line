@@ -1,4 +1,5 @@
 import { getSmallTextSize } from "./screens.js";
+import { hasHover } from "./window.js";
 
 class Menu {
   constructor(ctx, width, height) {
@@ -42,7 +43,7 @@ class Menu {
     const buttonHeight = textSize * 2.4;
     const space = this.containerHeight / this._options.length;
 
-    if (space < buttonHeight * 1.5) {
+    if (space < buttonHeight * 1.2) {
       this.ctx.restore();
       throw new Error("Too many options don't fit in container");
     }
@@ -79,7 +80,7 @@ class Menu {
     for (let i = 0; i < this._renderedOptions.length; i++) {
       const opt = this._renderedOptions[i];
 
-      this.ctx.fillStyle = i !== this._selectedOption ? "#0f1743" : "#1f295d";
+      this.ctx.fillStyle = !hasHover() || i !== this._selectedOption ? "#0f1743" : "#1f295d";
       this.ctx.fillRect(opt.button.x, opt.button.y, opt.button.width, opt.button.height);
 
       this.ctx.fillStyle = "white";
