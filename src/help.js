@@ -28,7 +28,9 @@ export function showHelp(canvasEl, ctx, width, height, text, size) {
       if (ctx.measureText(line.slice(0, fits)).width <= width - padding * 4) {
         ctx.fillText(line.slice(0, fits), padding * 2, padding * 2 + size * 1.2 * n);
         line = line.slice(fits);
+        fits = line.length;
         n++;
+        continue;
       }
 
       fits--;
