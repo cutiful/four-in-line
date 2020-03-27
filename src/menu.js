@@ -6,6 +6,8 @@ class Menu {
     this.containerWidth = width;
     this.containerHeight = height;
 
+    this.active = true;
+
     this._options = [];
     this._beforeRedraw = null;
 
@@ -93,11 +95,15 @@ class Menu {
   }
 
   _clickHandler(e) {
+    if (!this.active) return;
+
     if (this._selectedOption !== -1)
       this._renderedOptions[this._selectedOption].callback();
   }
 
   _mousemoveHandler(e) {
+    if (!this.active) return;
+
     let selected = -1;
     for (let i = 0; i < this._renderedOptions.length; i++) {
       const opt = this._renderedOptions[i];
