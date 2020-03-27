@@ -22,7 +22,7 @@ export function getSmallerTextSize(width) {
   if (width >= 520) {
     return 15;
   } else if (width >= 450) {
-    return 14;
+    return 13;
   } else if (width >= 420) {
     return 12;
   } else if (width >= 320) {
