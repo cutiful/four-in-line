@@ -79,7 +79,7 @@ class Menu {
     for (let i = 0; i < this._renderedOptions.length; i++) {
       const opt = this._renderedOptions[i];
 
-      this.ctx.fillStyle = i !== this._selectedOption ? "black" : "#333";
+      this.ctx.fillStyle = i !== this._selectedOption ? "#0f1743" : "#1f295d";
       this.ctx.fillRect(opt.button.x, opt.button.y, opt.button.width, opt.button.height);
 
       this.ctx.fillStyle = "white";

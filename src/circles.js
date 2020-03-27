@@ -101,7 +101,7 @@ export function strikethroughCircles(ctx, width, height, first, last) {
     y2 = height / rows * (last[0] + 0.5);
 
   ctx.lineWidth = 4;
-  ctx.strokeStyle = "#ff6769";
+  ctx.strokeStyle = alphaColor2;
 
   ctx.beginPath();
   ctx.moveTo(x1, y1);
