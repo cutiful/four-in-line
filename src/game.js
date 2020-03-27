@@ -140,6 +140,8 @@ class FourInLine {
     for (const l of this.listeners) {
       canvasEl.removeEventListener(l.on, l.fn);
     }
+
+    this.listeners = [];
   }
 }
 

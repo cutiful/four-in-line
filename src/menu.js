@@ -128,9 +128,11 @@ class Menu {
   }
 
   removeHandlers(canvasEl) {
-    for (const l of this.listeners) {
+    for (const l of this._listeners) {
       canvasEl.removeEventListener(l.on, l.fn);
     }
+
+    this._listeners = [];
   }
 }
 
