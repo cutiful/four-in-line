@@ -8,6 +8,8 @@ export function drawWinnerScreen(ctx, width, height, team) {
 export function drawText(ctx, width, height, text, size, color, background) {
   ctx.save();
 
+  ctx.globalAlpha = 0.9;
+
   ctx.font = `${size}px monospace`;
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
