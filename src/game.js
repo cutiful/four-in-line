@@ -15,6 +15,7 @@ class FourInLine {
     this.selectedColumn = 0;
     this.currentMove = 1;
     this.active = true;
+    this.animating = false;
     this.winner = { team: 0, first: [], last: [] };
     this.noMoves = false;
 
@@ -54,7 +55,7 @@ class FourInLine {
     fillField(this.ctx, this.width, this.height);
     drawBorders(this.ctx, this.width, this.height);
 
-    if (this.selectedColumn > 0 && hasHover())
+    if ((this.active || this.animating) && this.selectedColumn > 0 && hasHover())
       highlightColumn(this.ctx, this.width, this.height, this.selectedColumn);
 
     drawCircles(this.ctx, this.width, this.height, this.circles);
@@ -89,8 +90,10 @@ class FourInLine {
 
     if (row === -1) return;
     this.active = false;
+    this.animating = true;
 
     animateCircle(this.ctx, this.width, this.height, row, col, this.currentMove, this.draw.bind(this), () => {
+      this.animating = false;
       this.circles[row][col] = this.currentMove;
       this.currentMove = this.currentMove === 1 ? 2 : 1;
       const localWinner = checkWinningCombinations(this.circles);
