@@ -91,3 +91,23 @@ export function animateCircle(ctx, width, height, row, column, team, draw, onCom
 
   window.requestAnimationFrame(func);
 }
+
+export function strikethroughCircles(ctx, width, height, first, last) {
+  ctx.save();
+
+  const x1 = width / columns * (first[1] + 0.5),
+    y1 = height / rows * (first[0] + 0.5),
+    x2 = width / columns * (last[1] + 0.5),
+    y2 = height / rows * (last[0] + 0.5);
+
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#ff6769";
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.closePath();
+
+  ctx.restore();
+}

@@ -1,5 +1,5 @@
 import { fillField, drawBorders, highlightColumn } from "./field.js";
-import { drawCircles, animateCircle } from "./circles.js";
+import { drawCircles, animateCircle, strikethroughCircles } from "./circles.js";
 import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
 import { drawWinnerScreen, drawText } from "./text.js";
@@ -57,8 +57,9 @@ const draw = () => {
   drawCircles(ctx, width, height, circles);
 };
 
-const win = team => {
-  drawWinnerScreen(ctx, width, height, team);
+const win = winner => {
+  strikethroughCircles(ctx, width, height, winner.first, winner.last);
+  drawWinnerScreen(ctx, width, height, winner.team);
 
   const clickListener = e => {
     canvasEl.removeEventListener("click", clickListener);
@@ -115,9 +116,9 @@ canvasEl.addEventListener("click", e => {
       currentMove = currentMove === 1 ? 2 : 1;
       draw();
 
-      const wins = checkWinningCombinations(circles);
-      if (wins)
-        win(wins);
+      const winner = checkWinningCombinations(circles);
+      if (winner.team)
+        win(winner);
       else if (!checkAvailableMoves(circles))
         noMoves();
       else
