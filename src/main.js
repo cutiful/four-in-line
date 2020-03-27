@@ -25,13 +25,17 @@ if (dpr !== 1) {
 }
 
 const circles = [];
-let selectedColumn = 0;
-let currentMove = 1;
-let active = true;
+let selectedColumn = 0,
+  currentMove = 1,
+  active = true,
+  winner = { team: 0, first: [], last: [] },
+  noMoves = false;
 
 const reset = () => {
   currentMove = 1;
   active = true;
+  winner = { team: 0, first: [], last: [] };
+  noMoves = false;
 
   for (let i = 0, l = circles.length; i < l; i++) {
     circles.pop();
@@ -55,35 +59,14 @@ const draw = () => {
     highlightColumn(ctx, width, height, selectedColumn);
 
   drawCircles(ctx, width, height, circles);
-};
 
-const win = winner => {
-  strikethroughCircles(ctx, width, height, winner.first, winner.last);
-  drawWinnerScreen(ctx, width, height, winner.team);
+  if (winner.team) {
+    strikethroughCircles(ctx, width, height, winner.first, winner.last);
+    drawWinnerScreen(ctx, width, height, winner.team);
+  }
 
-  const clickListener = e => {
-    canvasEl.removeEventListener("click", clickListener);
-
-    reset();
-    draw();
-    active = true;
-  };
-
-  canvasEl.addEventListener("click", clickListener);
-};
-
-const noMoves = () => {
-  drawText(ctx, width, height, "No moves left!", 32, "white", "black");
-
-  const clickListener = e => {
-    canvasEl.removeEventListener("click", clickListener);
-
-    reset();
-    draw();
-    active = true;
-  };
-
-  canvasEl.addEventListener("click", clickListener);
+  if (noMoves)
+    drawText(ctx, width, height, "No moves left!", 32, "white", "black");
 };
 
 canvasEl.addEventListener("mousemove", e => {
@@ -104,6 +87,13 @@ canvasEl.addEventListener("mouseleave", e => {
 });
 
 canvasEl.addEventListener("click", e => {
+  if (noMoves || winner.team) {
+    reset();
+    draw();
+    active = true;
+    return;
+  }
+
   if (!active) return;
 
   const col = selectedColumn - 1;
@@ -121,15 +111,15 @@ canvasEl.addEventListener("click", e => {
   animateCircle(ctx, width, height, row, col, currentMove, draw, () => {
     circles[row][col] = currentMove;
     currentMove = currentMove === 1 ? 2 : 1;
-    draw();
-
-    const winner = checkWinningCombinations(circles);
-    if (winner.team)
-      win(winner);
+    const localWinner = checkWinningCombinations(circles);
+    if (localWinner.team)
+      winner = localWinner;
     else if (!checkAvailableMoves(circles))
-      noMoves();
+      noMoves = true;
     else
       active = true;
+
+    draw();
   });
 });
 
