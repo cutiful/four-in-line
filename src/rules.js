@@ -93,7 +93,7 @@ export function checkWinningCombinations(circles) {
 
       if (circles[y-offset][columns-1-offset] !== team) {
         streak = 1;
-        first = [y-offset, columns-1-offse];
+        first = [y-offset, columns-1-offset];
         team = circles[y-offset][columns-1-offset];
       } else if (team != 0) {
         streak++;
