@@ -49,6 +49,8 @@
       if (!window.haveDynamicImport) {
         const systemJsLoaderTag = document.createElement("script");
         systemJsLoaderTag.src = "https://unpkg.com/systemjs@2.0.0/dist/s.min.js";
+        systemJsLoaderTag.crossOrigin = "anonymous";
+        systemJsLoaderTag.integrity = "sha384-hERvafCnBvf0kzE113wEhYKbX0fGgdXkgOvQ4gtxMl8emjzwrHGdSqwfhxpmorUV";
         systemJsLoaderTag.addEventListener("load", function () {
           document.head.removeChild(systemJsLoaderTag);
           System.import("./bundle-noimport.js");
