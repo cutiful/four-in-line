@@ -84,12 +84,12 @@ export function animateCircle(ctx, width, height, row, column, team, draw, onCom
     drawCircle(ctx, width, height, x, y, team);
 
     if (!done)
-      window.requestAnimationFrame(func);
+      requestAnimationFrame(func);
     else
       onComplete();
   };
 
-  window.requestAnimationFrame(func);
+  requestAnimationFrame(func);
 }
 
 export function strikethroughCircles(ctx, width, height, first, last) {
