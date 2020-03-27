@@ -8,12 +8,11 @@ export function drawWinnerScreen(ctx, width, height, team) {
 export function drawText(ctx, width, height, text, size, color, background) {
   ctx.save();
 
-  ctx.globalAlpha = 0.9;
-
   ctx.font = `${size}px monospace`;
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
+  ctx.globalAlpha = 0.9;
   ctx.shadowBlur = 4;
   ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
 
@@ -21,6 +20,7 @@ export function drawText(ctx, width, height, text, size, color, background) {
   ctx.fillStyle = background;
   ctx.fillRect(width / 2 - t.width / 2 - 10, height / 2 - size / 2 - 10, t.width + 20, size + 20);
 
+  ctx.globalAlpha = 1;
   ctx.shadowBlur = 2;
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;
