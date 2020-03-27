@@ -11,10 +11,10 @@ class FourInLine {
     this.width = width;
     this.height = height;
 
-    this.active = true;
-
     this._circles = [];
     this._selectedColumn = 0;
+
+    this._active = true;
     this._currentMove = 1;
     this._noMoves = false;
     this._winner = { team: 0, first: [], last: [] };
@@ -34,11 +34,11 @@ class FourInLine {
   }
 
   reset() {
+    this._active = true;
     this._currentMove = 1;
     this._noMoves = false;
     this._winner = { team: 0, first: [], last: [] };
 
-    this.active = true;
     this.animating = false;
 
     for (let i = 0, l = this._circles.length; i < l; i++) {
@@ -59,7 +59,7 @@ class FourInLine {
     fillField(this.ctx, this.width, this.height);
     drawBorders(this.ctx, this.width, this.height);
 
-    if ((this.active || this._animating) && this._selectedColumn > 0 && hasHover())
+    if ((this._active || this._animating) && this._selectedColumn > 0 && hasHover())
       highlightColumn(this.ctx, this.width, this.height, this._selectedColumn);
 
     drawCircles(this.ctx, this.width, this.height, this._circles);
@@ -77,11 +77,11 @@ class FourInLine {
     if (this._noMoves || this._winner.team) {
       this.reset.call(this);
       this.draw.call(this);
-      this.active = true;
+      this._active = true;
       return;
     }
 
-    if (!this.active) return;
+    if (!this._active) return;
 
     const col = this._selectedColumn - 1;
     let row = -1;
@@ -93,7 +93,7 @@ class FourInLine {
     }
 
     if (row === -1) return;
-    this.active = false;
+    this._active = false;
     this.animating = true;
 
     animateCircle(this.ctx, this.width, this.height, row, col, this._currentMove, this.draw.bind(this), () => {
@@ -105,7 +105,7 @@ class FourInLine {
       else if (!checkAvailableMoves(this._circles))
         this._noMoves = true;
       else
-        this.active = true;
+        this._active = true;
 
       this.animating = false;
       this.draw.call(this);
@@ -116,7 +116,7 @@ class FourInLine {
     const column = Math.ceil(e.offsetX / (this.width / columns));
     if (column !== this._selectedColumn) {
       this._selectedColumn = column;
-      if (!this.active) return;
+      if (!this._active) return;
 
       this.draw.call(this);
     }
@@ -124,7 +124,7 @@ class FourInLine {
 
   _mouseleaveHandler(e) {
     this._selectedColumn = 0;
-    if (!this.active) return;
+    if (!this._active) return;
 
     this.draw.call(this);
   }
