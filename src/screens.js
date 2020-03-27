@@ -26,7 +26,7 @@ export function getSmallerTextSize(width) {
   } else if (width >= 420) {
     return 12;
   } else if (width >= 320) {
-    return 10;
+    return 9;
   }
 
   return 6;
