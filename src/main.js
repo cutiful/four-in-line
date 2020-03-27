@@ -107,26 +107,30 @@ canvasEl.addEventListener("click", e => {
   if (!active) return;
 
   const col = selectedColumn - 1;
+  let row = -1;
   for (let i = circles.length - 1; i >= 0; i--) {
     if (circles[i][col]) continue;
 
-    active = false;
-    animateCircle(ctx, width, height, i, col, currentMove, draw, () => {
-      circles[i][col] = currentMove;
-      currentMove = currentMove === 1 ? 2 : 1;
-      draw();
-
-      const winner = checkWinningCombinations(circles);
-      if (winner.team)
-        win(winner);
-      else if (!checkAvailableMoves(circles))
-        noMoves();
-      else
-        active = true;
-    });
-
+    row = i;
     break;
   }
+
+  if (row === -1) return;
+  active = false;
+
+  animateCircle(ctx, width, height, row, col, currentMove, draw, () => {
+    circles[row][col] = currentMove;
+    currentMove = currentMove === 1 ? 2 : 1;
+    draw();
+
+    const winner = checkWinningCombinations(circles);
+    if (winner.team)
+      win(winner);
+    else if (!checkAvailableMoves(circles))
+      noMoves();
+    else
+      active = true;
+  });
 });
 
 reset();
