@@ -120,22 +120,18 @@ class FourInLine {
   }
 
   _mousemoveHandler(e) {
-    if (this.paused) return;
-
     const column = Math.ceil(e.offsetX / (this.width / columns));
     if (column !== this._selectedColumn) {
       this._selectedColumn = column;
-      if (!this._active) return;
+      if (!this._active || this.paused) return;
 
       this.draw.call(this);
     }
   }
 
   _mouseleaveHandler(e) {
-    if (this.paused) return;
-
     this._selectedColumn = 0;
-    if (!this._active) return;
+    if (!this._active || this.paused) return;
 
     this.draw.call(this);
   }
