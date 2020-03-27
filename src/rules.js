@@ -1,6 +1,8 @@
 import { rows, columns } from "./config.js";
 
 export function checkWinningCombinations(circles) {
+  let first = [];
+
   // horizontal
   for (let row = 0; row < rows; row++) {
     let streak = 0;
@@ -9,13 +11,14 @@ export function checkWinningCombinations(circles) {
     for (let column = 0; column < columns; column++) {
       if (circles[row][column] !== team) {
         streak = 1;
+        first = [row, column];
         team = circles[row][column];
       } else if (team != 0) {
         streak++;
       }
 
       if (streak >= 4)
-        return team;
+        return { team, first, last: [row, column] };
     }
   }
 
@@ -27,13 +30,14 @@ export function checkWinningCombinations(circles) {
     for (let row = 0; row < rows; row++) {
       if (circles[row][column] !== team) {
         streak = 1;
+        first = [row, column];
         team = circles[row][column];
       } else if (team != 0) {
         streak++;
       }
 
       if (streak >= 4)
-        return team;
+        return { team, first, last: [row, column] };
     }
   }
 
@@ -48,13 +52,14 @@ export function checkWinningCombinations(circles) {
 
       if (circles[y-offset][offset] !== team) {
         streak = 1;
+        first = [y-offset, offset];
         team = circles[y-offset][offset];
       } else if (team != 0) {
         streak++;
       }
 
       if (streak >= 4)
-        return team;
+        return { team, first, last: [y-offset, offset] };
     }
 
     streak = 0;
@@ -66,13 +71,14 @@ export function checkWinningCombinations(circles) {
 
       if (circles[y+offset][columns-1-offset] !== team) {
         streak = 1;
+        first = [y+offset, columns-1-offset];
         team = circles[y+offset][columns-1-offset];
       } else if (team != 0) {
         streak++;
       }
 
       if (streak >= 4)
-        return team;
+        return { team, first, last: [y+offset, columns-1-offset] };
     }
   }
 
@@ -87,13 +93,14 @@ export function checkWinningCombinations(circles) {
 
       if (circles[y-offset][columns-1-offset] !== team) {
         streak = 1;
+        first = [y-offset, columns-1-offse];
         team = circles[y-offset][columns-1-offset];
       } else if (team != 0) {
         streak++;
       }
   
       if (streak >= 4)
-        return team;
+        return { team, first, last: [y-offset, columns-1-offset] };
     }
 
     streak = 0;
@@ -105,17 +112,18 @@ export function checkWinningCombinations(circles) {
 
       if (circles[y+offset][offset] !== team) {
         streak = 1;
+        first = [y+offset, offset];
         team = circles[y+offset][offset];
       } else if (team != 0) {
         streak++;
       }
 
       if (streak >= 4)
-        return team;
+        return { team, first, last: [y+offset, offset] };
     }
   }
 
-  return 0;
+  return { team: 0, first: [], last: [] };
 }
 
 export function checkAvailableMoves(circles) {
