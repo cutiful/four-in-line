@@ -17,6 +17,7 @@ export function drawBorders(ctx, width, height) {
     ctx.moveTo(width / columns * i, 0);
     ctx.lineTo(width / columns * i, height);
     ctx.stroke();
+    ctx.closePath();
   }
 
   for (let i = 1; i < rows; i++) {
@@ -24,6 +25,7 @@ export function drawBorders(ctx, width, height) {
     ctx.moveTo(0, height / rows * i);
     ctx.lineTo(width, height / rows * i);
     ctx.stroke();
+    ctx.closePath();
   }
 
   ctx.restore();
