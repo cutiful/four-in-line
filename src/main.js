@@ -6,7 +6,8 @@ import { drawWinnerScreen, drawText } from "./winner.js";
 
 const canvasEl = document.getElementById("game"),
   containerEl = document.getElementsByClassName("subcontainer")[0],
-  ctx = canvasEl.getContext("2d"); 
+  ctx = canvasEl.getContext("2d"),
+  dpr = window.devicePixelRatio || 1;
 
 const hasHover = !("ontouchstart" in document.documentElement ||
   navigator.maxTouchPoints > 0 ||
@@ -14,8 +15,14 @@ const hasHover = !("ontouchstart" in document.documentElement ||
 
 let width = containerEl.clientWidth,
   height = width / columns * rows; // containerEl.clientHeight;
-canvasEl.width = width;
-canvasEl.height = height;
+canvasEl.width = width * dpr;
+canvasEl.height = height * dpr;
+
+if (dpr !== 1) {
+  canvasEl.style.width = width + "px";
+  canvasEl.style.height = height + "px";
+  ctx.scale(dpr, dpr);
+}
 
 const circles = [];
 let selectedColumn = 0;
