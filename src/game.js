@@ -21,6 +21,7 @@ class FourInLine {
 
     this._listeners = [];
     this._animating = false;
+    this._animationWaiters = [];
 
     for (let i = 0; i < rows; i++) {
       const row = [];
@@ -34,9 +35,11 @@ class FourInLine {
 
   reset() {
     this._currentMove = 1;
-    this.active = true;
-    this._winner = { team: 0, first: [], last: [] };
     this._noMoves = false;
+    this._winner = { team: 0, first: [], last: [] };
+
+    this.active = true;
+    this.animating = false;
 
     for (let i = 0, l = this._circles.length; i < l; i++) {
       this._circles.pop();
@@ -91,10 +94,9 @@ class FourInLine {
 
     if (row === -1) return;
     this.active = false;
-    this._animating = true;
+    this.animating = true;
 
     animateCircle(this.ctx, this.width, this.height, row, col, this._currentMove, this.draw.bind(this), () => {
-      this._animating = false;
       this._circles[row][col] = this._currentMove;
       this._currentMove = this._currentMove === 1 ? 2 : 1;
       const localWinner = checkWinningCombinations(this._circles);
@@ -105,6 +107,7 @@ class FourInLine {
       else
         this.active = true;
 
+      this.animating = false;
       this.draw.call(this);
     });
   }
@@ -146,6 +149,30 @@ class FourInLine {
     }
 
     this._listeners = [];
+  }
+
+  get animating() {
+    return this._animating;
+  }
+
+  set animating(val) {
+    this._animating = val;
+
+    if (!val) {
+      for (const p of this._animationWaiters)
+        p();
+
+      this._animationWaiters = [];
+    }
+  }
+
+  waitForAnimation() {
+    if (!this.animating)
+      return Promise.resolve();
+
+    return new Promise(resolve => {
+      this._animationWaiters.push(resolve);
+    });
   }
 }
 
