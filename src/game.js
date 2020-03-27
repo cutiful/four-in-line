@@ -11,6 +11,8 @@ class FourInLine {
     this.width = width;
     this.height = height;
 
+    this.paused = false;
+
     this._circles = [];
     this._selectedColumn = 0;
 
@@ -59,7 +61,10 @@ class FourInLine {
     fillField(this.ctx, this.width, this.height);
     drawBorders(this.ctx, this.width, this.height);
 
-    if ((this._active || this._animating) && this._selectedColumn > 0 && hasHover())
+    if (!this.paused &&
+      (this._active || this._animating) &&
+      this._selectedColumn > 0
+      && hasHover())
       highlightColumn(this.ctx, this.width, this.height, this._selectedColumn);
 
     drawCircles(this.ctx, this.width, this.height, this._circles);
@@ -74,6 +79,8 @@ class FourInLine {
   }
 
   _clickHandler(e) {
+    if (this.paused) return;
+
     if (this._noMoves || this._winner.team) {
       this.reset.call(this);
       this.draw.call(this);
@@ -113,6 +120,8 @@ class FourInLine {
   }
 
   _mousemoveHandler(e) {
+    if (this.paused) return;
+
     const column = Math.ceil(e.offsetX / (this.width / columns));
     if (column !== this._selectedColumn) {
       this._selectedColumn = column;
@@ -123,6 +132,8 @@ class FourInLine {
   }
 
   _mouseleaveHandler(e) {
+    if (this.paused) return;
+
     this._selectedColumn = 0;
     if (!this._active) return;
 
