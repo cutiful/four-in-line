@@ -10,16 +10,17 @@ class FourInLine {
     this.ctx = ctx;
     this.width = width;
     this.height = height;
-    this.circles = [];
 
-    this.selectedColumn = 0;
-    this.currentMove = 1;
     this.active = true;
-    this.animating = false;
-    this.winner = { team: 0, first: [], last: [] };
-    this.noMoves = false;
 
-    this.listeners = [];
+    this._circles = [];
+    this._selectedColumn = 0;
+    this._currentMove = 1;
+    this._noMoves = false;
+    this._winner = { team: 0, first: [], last: [] };
+
+    this._listeners = [];
+    this._animating = false;
 
     for (let i = 0; i < rows; i++) {
       const row = [];
@@ -27,18 +28,18 @@ class FourInLine {
         row.push(0);
       }
 
-      this.circles.push(row);
+      this._circles.push(row);
     }
   }
 
   reset() {
-    this.currentMove = 1;
+    this._currentMove = 1;
     this.active = true;
-    this.winner = { team: 0, first: [], last: [] };
-    this.noMoves = false;
+    this._winner = { team: 0, first: [], last: [] };
+    this._noMoves = false;
 
-    for (let i = 0, l = this.circles.length; i < l; i++) {
-      this.circles.pop();
+    for (let i = 0, l = this._circles.length; i < l; i++) {
+      this._circles.pop();
     }
 
     for (let i = 0; i < rows; i++) {
@@ -47,7 +48,7 @@ class FourInLine {
         row.push(0);
       }
 
-      this.circles.push(row);
+      this._circles.push(row);
     }
   }
 
@@ -55,22 +56,22 @@ class FourInLine {
     fillField(this.ctx, this.width, this.height);
     drawBorders(this.ctx, this.width, this.height);
 
-    if ((this.active || this.animating) && this.selectedColumn > 0 && hasHover())
-      highlightColumn(this.ctx, this.width, this.height, this.selectedColumn);
+    if ((this.active || this._animating) && this._selectedColumn > 0 && hasHover())
+      highlightColumn(this.ctx, this.width, this.height, this._selectedColumn);
 
-    drawCircles(this.ctx, this.width, this.height, this.circles);
+    drawCircles(this.ctx, this.width, this.height, this._circles);
 
-    if (this.winner.team) {
-      strikethroughCircles(this.ctx, this.width, this.height, this.winner.first, this.winner.last);
-      drawWinnerScreen(this.ctx, this.width, this.height, this.winner.team);
+    if (this._winner.team) {
+      strikethroughCircles(this.ctx, this.width, this.height, this._winner.first, this._winner.last);
+      drawWinnerScreen(this.ctx, this.width, this.height, this._winner.team);
     }
 
-    if (this.noMoves)
+    if (this._noMoves)
       drawText(this.ctx, this.width, this.height, "No moves left!", 32, "white", "black");
   }
 
   _clickHandler(e) {
-    if (this.noMoves || this.winner.team) {
+    if (this._noMoves || this._winner.team) {
       this.reset.call(this);
       this.draw.call(this);
       this.active = true;
@@ -79,10 +80,10 @@ class FourInLine {
 
     if (!this.active) return;
 
-    const col = this.selectedColumn - 1;
+    const col = this._selectedColumn - 1;
     let row = -1;
-    for (let i = this.circles.length - 1; i >= 0; i--) {
-      if (this.circles[i][col]) continue;
+    for (let i = this._circles.length - 1; i >= 0; i--) {
+      if (this._circles[i][col]) continue;
 
       row = i;
       break;
@@ -90,17 +91,17 @@ class FourInLine {
 
     if (row === -1) return;
     this.active = false;
-    this.animating = true;
+    this._animating = true;
 
-    animateCircle(this.ctx, this.width, this.height, row, col, this.currentMove, this.draw.bind(this), () => {
-      this.animating = false;
-      this.circles[row][col] = this.currentMove;
-      this.currentMove = this.currentMove === 1 ? 2 : 1;
-      const localWinner = checkWinningCombinations(this.circles);
+    animateCircle(this.ctx, this.width, this.height, row, col, this._currentMove, this.draw.bind(this), () => {
+      this._animating = false;
+      this._circles[row][col] = this._currentMove;
+      this._currentMove = this._currentMove === 1 ? 2 : 1;
+      const localWinner = checkWinningCombinations(this._circles);
       if (localWinner.team)
-        this.winner = localWinner;
-      else if (!checkAvailableMoves(this.circles))
-        this.noMoves = true;
+        this._winner = localWinner;
+      else if (!checkAvailableMoves(this._circles))
+        this._noMoves = true;
       else
         this.active = true;
 
@@ -110,8 +111,8 @@ class FourInLine {
 
   _mousemoveHandler(e) {
     const column = Math.ceil(e.offsetX / (this.width / columns));
-    if (column !== this.selectedColumn) {
-      this.selectedColumn = column;
+    if (column !== this._selectedColumn) {
+      this._selectedColumn = column;
       if (!this.active) return;
 
       this.draw.call(this);
@@ -119,7 +120,7 @@ class FourInLine {
   }
 
   _mouseleaveHandler(e) {
-    this.selectedColumn = 0;
+    this._selectedColumn = 0;
     if (!this.active) return;
 
     this.draw.call(this);
@@ -130,9 +131,9 @@ class FourInLine {
     const onmousemove = { on: "mousemove", fn: this._mousemoveHandler.bind(this) };
     const onmouseleave = { on: "mouseleave", fn: this._mouseleaveHandler.bind(this) };
 
-    this.listeners.push(onclick);
-    this.listeners.push(onmousemove);
-    this.listeners.push(onmouseleave);
+    this._listeners.push(onclick);
+    this._listeners.push(onmousemove);
+    this._listeners.push(onmouseleave);
 
     canvasEl.addEventListener("click", onclick.fn);
     canvasEl.addEventListener("mousemove", onmousemove.fn);
@@ -140,11 +141,11 @@ class FourInLine {
   }
 
   removeHandlers(canvasEl) {
-    for (const l of this.listeners) {
+    for (const l of this._listeners) {
       canvasEl.removeEventListener(l.on, l.fn);
     }
 
-    this.listeners = [];
+    this._listeners = [];
   }
 }
 
