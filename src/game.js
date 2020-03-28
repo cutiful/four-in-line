@@ -100,20 +100,21 @@ class FourInLine {
     this._active = false;
     this.animating = true;
 
-    animateCircle(this.ctx, this.width, this.height, row, col, this._currentTurn, this.draw.bind(this), () => {
-      this._circles[row][col] = this._currentTurn;
-      this._currentTurn = this._currentTurn === 1 ? 2 : 1;
-      const localWinner = checkWinningCombinations(this._circles);
-      if (localWinner.team)
-        this._winner = localWinner;
-      else if (!checkAvailableMoves(this._circles))
-        this._noMoves = true;
-      else
-        this._active = true;
+    animateCircle(this.ctx, this.width, this.height, row, col, this._currentTurn, this.draw.bind(this))
+      .then(() => {
+        this._circles[row][col] = this._currentTurn;
+        this._currentTurn = this._currentTurn === 1 ? 2 : 1;
+        const localWinner = checkWinningCombinations(this._circles);
+        if (localWinner.team)
+          this._winner = localWinner;
+        else if (!checkAvailableMoves(this._circles))
+          this._noMoves = true;
+        else
+          this._active = true;
 
-      this.animating = false;
-      this.draw.call(this);
-    });
+        this.animating = false;
+        this.draw.call(this);
+      });
   }
 
   _clickHandler(e) {

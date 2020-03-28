@@ -55,7 +55,7 @@ export function drawCircle(ctx, width, height, x, y, team) {
   ctx.restore();
 }
 
-export function animateCircle(ctx, width, height, row, column, team, draw, onComplete) {
+export function animateCircle(ctx, width, height, row, column, team, draw) {
   let ts = 0,
     y = 0,
     done = false;
@@ -64,33 +64,35 @@ export function animateCircle(ctx, width, height, row, column, team, draw, onCom
     targetY = height / rows * (row + 0.5),
     speed = height * 3;
 
-  const func = time => {
-    let diff;
+  return new Promise(resolve => {
+    const func = time => {
+      let diff;
 
-    if (ts === 0) {
-      diff = 0;
-      ts = time;
-    } else {
-      diff = time - ts;
-      ts = time;
-    }
+      if (ts === 0) {
+        diff = 0;
+        ts = time;
+      } else {
+        diff = time - ts;
+        ts = time;
+      }
 
-    y += diff / 1000 * speed;
-    if (y >= targetY) {
-      y = targetY;
-      done = true;
-    }
+      y += diff / 1000 * speed;
+      if (y >= targetY) {
+        y = targetY;
+        done = true;
+      }
 
-    draw();
-    drawCircle(ctx, width, height, x, y, team);
+      draw();
+      drawCircle(ctx, width, height, x, y, team);
 
-    if (!done)
-      requestAnimationFrame(func);
-    else
-      onComplete();
-  };
+      if (!done)
+        requestAnimationFrame(func);
+      else
+        resolve();
+    };
 
-  requestAnimationFrame(func);
+    requestAnimationFrame(func);
+  });
 }
 
 export function strikethroughCircles(ctx, width, height, first, last) {
