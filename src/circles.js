@@ -1,4 +1,5 @@
 import { rows, columns, alphaColor1, alphaColor2, betaColor1, betaColor2, circleOffset } from "./config.js";
+import { getSmallerTextSize } from "./screens.js";
 
 export function drawCircles(ctx, width, height, circles) {
   ctx.save();
@@ -108,6 +109,27 @@ export function strikethroughCircles(ctx, width, height, first, last) {
   ctx.lineTo(x2, y2);
   ctx.stroke();
   ctx.closePath();
+
+  ctx.restore();
+}
+
+export function drawCurrentTurn(ctx, width, height, team) {
+  ctx.save();
+
+  const size = getSmallerTextSize(width);
+  ctx.fillStyle = "#222";
+  ctx.font = `${size}px monospace`;
+  ctx.textBaseline = "top";
+  ctx.textAlign = "left";
+
+  const tw = ctx.measureText("Current turn: ", 0, 0).width;
+  ctx.fillText("Current turn: ", 4, 4);
+
+  ctx.fillStyle = team === 1 ? alphaColor2 : betaColor2;
+
+  ctx.beginPath();
+  ctx.arc(tw + size / 2, size / 2 + 4, size / 2, 0, Math.PI * 2, false);
+  ctx.fill();
 
   ctx.restore();
 }

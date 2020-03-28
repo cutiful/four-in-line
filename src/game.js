@@ -1,5 +1,5 @@
 import { fillField, drawBorders, highlightColumn } from "./field.js";
-import { drawCircles, animateCircle, strikethroughCircles } from "./circles.js";
+import { drawCircles, animateCircle, strikethroughCircles, drawCurrentTurn } from "./circles.js";
 import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
 import { drawWinnerScreen, drawText } from "./text.js";
@@ -72,6 +72,8 @@ class FourInLine {
     if (this._winner.team) {
       strikethroughCircles(this.ctx, this.width, this.height, this._winner.first, this._winner.last);
       drawWinnerScreen(this.ctx, this.width, this.height, this._winner.team);
+    } else if (!this.paused) {
+      drawCurrentTurn(this.ctx, this.width, this.height, this._currentMove);
     }
 
     if (this._noMoves)
