@@ -10,14 +10,16 @@ export function calculateBestMove(circles, depth) {
   const values = [];
   for (const col of availableMoves) {
     const newCircles = makeMove(circles, col, aiTeam);
-    const moveValue = minimax(newCircles, depth, false);
+    const moveValue = alphabeta(newCircles, depth, -Infinity, Infinity, false);
     values.push([col, moveValue]);
   }
 
   return values.sort((a, b) => a[1] === b[1] ? 0 : a[1] > b[1] ? -1 : 1)[0][0];
 }
 
-function minimax(circles, depth, ourMove) {
+function alphabeta(circles, depth, a, b, ourMove) {
+  let alpha = a, beta = b;
+
   const winner = checkWinningCombinations(circles);
   if (winner.team !== 0) { // terminal node
     if (winner.team === aiTeam)
@@ -35,8 +37,12 @@ function minimax(circles, depth, ourMove) {
     let value = -10000000000000;
     for (const col of availableMoves) {
       const newCircles = makeMove(circles, col, aiTeam);
-      const moveValue = minimax(newCircles, depth - 1, false);
+      const moveValue = alphabeta(newCircles, depth - 1, alpha, beta, false);
       value = moveValue > value ? moveValue : value;
+
+      alpha = value > alpha ? value : alpha;
+      if (alpha >= beta)
+        break;
     }
 
     return value;
@@ -44,8 +50,11 @@ function minimax(circles, depth, ourMove) {
     let value = 10000000000000;
     for (const col of availableMoves) {
       const newCircles = makeMove(circles, col, playerTeam);
-      const moveValue = minimax(newCircles, depth - 1, true);
+      const moveValue = alphabeta(newCircles, depth - 1, alpha, beta, true);
       value = moveValue < value ? moveValue : value;
+      beta = value < beta ? value : beta;
+      if (alpha >= beta)
+        break;
     }
 
     return value;
