@@ -81,28 +81,20 @@ class FourInLine {
       drawText(this.ctx, this.width, this.height, "No moves left!", 32, "white", "black");
   }
 
-  _clickHandler(e) {
-    if (this.paused) return;
-
-    if (this._noMoves || this._winner.team) {
-      this.reset.call(this);
-      this._active = true;
-      this._currentTurn = this._firstTurn === 1 ? 2 : 1;
-      this._firstTurn = this._currentTurn;
-      this.draw.call(this);
-      return;
-    }
-
-    if (!this._active) return;
-
-    const col = this._selectedColumn - 1;
+  static getMoveRow(circles, col) {
     let row = -1;
-    for (let i = this._circles.length - 1; i >= 0; i--) {
-      if (this._circles[i][col]) continue;
+    for (let i = circles.length - 1; i >= 0; i--) {
+      if (circles[i][col]) continue;
 
       row = i;
       break;
     }
+
+    return row;
+  }
+
+  processMove(col) {
+    const row = FourInLine.getMoveRow(this._circles, col);
 
     if (row === -1) return;
     this._active = false;
@@ -122,6 +114,22 @@ class FourInLine {
       this.animating = false;
       this.draw.call(this);
     });
+  }
+
+  _clickHandler(e) {
+    if (this.paused) return;
+
+    if (this._noMoves || this._winner.team) {
+      this.reset.call(this);
+      this._active = true;
+      this._currentTurn = this._firstTurn === 1 ? 2 : 1;
+      this._firstTurn = this._currentTurn;
+      this.draw.call(this);
+      return;
+    }
+
+    if (!this._active) return;
+    this.processMove.call(this, this._selectedColumn - 1);
   }
 
   _mousemoveHandler(e) {
