@@ -17,7 +17,8 @@ class FourInLine {
     this._selectedColumn = 0;
 
     this._active = true;
-    this._currentMove = 1;
+    this._firstTurn = 1;
+    this._currentTurn = 1;
     this._noMoves = false;
     this._winner = { team: 0, first: [], last: [] };
 
@@ -37,7 +38,7 @@ class FourInLine {
 
   reset() {
     this._active = true;
-    this._currentMove = 1;
+    this._currentTurn = 1;
     this._noMoves = false;
     this._winner = { team: 0, first: [], last: [] };
 
@@ -73,7 +74,7 @@ class FourInLine {
       strikethroughCircles(this.ctx, this.width, this.height, this._winner.first, this._winner.last);
       drawWinnerScreen(this.ctx, this.width, this.height, this._winner.team);
     } else if (!this.paused) {
-      drawCurrentTurn(this.ctx, this.width, this.height, this._currentMove);
+      drawCurrentTurn(this.ctx, this.width, this.height, this._currentTurn);
     }
 
     if (this._noMoves)
@@ -85,8 +86,10 @@ class FourInLine {
 
     if (this._noMoves || this._winner.team) {
       this.reset.call(this);
-      this.draw.call(this);
       this._active = true;
+      this._currentTurn = this._firstTurn === 1 ? 2 : 1;
+      this._firstTurn = this._currentTurn;
+      this.draw.call(this);
       return;
     }
 
@@ -105,9 +108,9 @@ class FourInLine {
     this._active = false;
     this.animating = true;
 
-    animateCircle(this.ctx, this.width, this.height, row, col, this._currentMove, this.draw.bind(this), () => {
-      this._circles[row][col] = this._currentMove;
-      this._currentMove = this._currentMove === 1 ? 2 : 1;
+    animateCircle(this.ctx, this.width, this.height, row, col, this._currentTurn, this.draw.bind(this), () => {
+      this._circles[row][col] = this._currentTurn;
+      this._currentTurn = this._currentTurn === 1 ? 2 : 1;
       const localWinner = checkWinningCombinations(this._circles);
       if (localWinner.team)
         this._winner = localWinner;
