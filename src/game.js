@@ -4,6 +4,7 @@ import { rows, columns } from "./config.js";
 import { checkWinningCombinations, checkAvailableMoves } from "./rules.js";
 import { drawWinnerScreen, drawText } from "./text.js";
 import { hasHover } from "./window.js";
+import { copyCircles } from "./misc.js";
 
 class FourInLine {
   constructor(ctx, width, height) {
@@ -25,6 +26,9 @@ class FourInLine {
     this._listeners = [];
     this._animating = false;
     this._animationWaiters = [];
+
+    this._externalPlayer = 0;
+    this._externalPlayerFn = undefined;
 
     for (let i = 0; i < rows; i++) {
       const row = [];
@@ -114,6 +118,9 @@ class FourInLine {
 
         this.animating = false;
         this.draw.call(this);
+
+        if (this._active)
+          setTimeout(this.checkExternalPlayer.bind(this));
       });
   }
 
@@ -126,6 +133,9 @@ class FourInLine {
       this._currentTurn = this._firstTurn === 1 ? 2 : 1;
       this._firstTurn = this._currentTurn;
       this.draw.call(this);
+
+      setTimeout(this.checkExternalPlayer.bind(this));
+
       return;
     }
 
@@ -194,6 +204,27 @@ class FourInLine {
     return new Promise(resolve => {
       this._animationWaiters.push(resolve);
     });
+  }
+
+  setExternalPlayer(player, fn) {
+    this._externalPlayer = player;
+    this._externalPlayerFn = fn;
+
+    if (this._active)
+      setTimeout(this.checkExternalPlayer.bind(this));
+  }
+
+  resetExternalPlayer() {
+    this._externalPlayer = 0;
+    this._externalPlayerFn = undefined;
+  }
+
+  checkExternalPlayer() {
+    if (this._externalPlayer && this._currentTurn === this._externalPlayer) {
+      this._active = false;
+      this._externalPlayerFn(copyCircles(this._circles))
+        .then(this.processMove.bind(this));
+    }
   }
 }
 
