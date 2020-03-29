@@ -160,7 +160,7 @@ class FourInLine {
     this.draw.call(this);
   }
 
-  installHandlers(canvasEl) {
+  installHandlers() {
     const onclick = { on: "click", fn: this._clickHandler.bind(this) };
     const onmousemove = { on: "mousemove", fn: this._mousemoveHandler.bind(this) };
     const onmouseleave = { on: "mouseleave", fn: this._mouseleaveHandler.bind(this) };
@@ -169,14 +169,14 @@ class FourInLine {
     this._listeners.push(onmousemove);
     this._listeners.push(onmouseleave);
 
-    canvasEl.addEventListener("click", onclick.fn);
-    canvasEl.addEventListener("mousemove", onmousemove.fn);
-    canvasEl.addEventListener("mouseleave", onmouseleave.fn);
+    this.ctx.canvas.addEventListener("click", onclick.fn);
+    this.ctx.canvas.addEventListener("mousemove", onmousemove.fn);
+    this.ctx.canvas.addEventListener("mouseleave", onmouseleave.fn);
   }
 
-  removeHandlers(canvasEl) {
+  removeHandlers() {
     for (const l of this._listeners) {
-      canvasEl.removeEventListener(l.on, l.fn);
+      this.ctx.canvas.removeEventListener(l.on, l.fn);
     }
 
     this._listeners = [];

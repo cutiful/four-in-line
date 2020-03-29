@@ -25,7 +25,7 @@ let installedSw = false;
 
 const game = new FourInLine(ctx, width, height);
 game.paused = true;
-game.installHandlers(canvasEl);
+game.installHandlers();
 
 const menu = new Menu(ctx, width, height);
 menu.addOptions([
@@ -110,7 +110,7 @@ menu.addOptions([
 ]);
 
 menu.onBeforeRedraw = game.draw.bind(game);
-menu.installHandlers(canvasEl);
+menu.installHandlers();
 menu.draw();
 
 document.addEventListener("keyup", e => {

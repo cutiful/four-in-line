@@ -123,20 +123,20 @@ class Menu {
     }
   }
 
-  installHandlers(canvasEl) {
+  installHandlers() {
     const onclick = { on: "click", fn: this._clickHandler.bind(this) };
     const onmousemove = { on: "mousemove", fn: this._mousemoveHandler.bind(this) };
 
     this._listeners.push(onclick);
     this._listeners.push(onmousemove);
 
-    canvasEl.addEventListener("click", onclick.fn);
-    canvasEl.addEventListener("mousemove", onmousemove.fn);
+    this.ctx.canvas.addEventListener("click", onclick.fn);
+    this.ctx.canvas.addEventListener("mousemove", onmousemove.fn);
   }
 
-  removeHandlers(canvasEl) {
+  removeHandlers() {
     for (const l of this._listeners) {
-      canvasEl.removeEventListener(l.on, l.fn);
+      this.ctx.canvas.removeEventListener(l.on, l.fn);
     }
 
     this._listeners = [];
