@@ -12,7 +12,7 @@ onmessage = e => {
       break;
 
     case "setLevel":
-      if (typeof e.data[1] !== "Number" || e.data[1] < 4 || e.data[1] > 8) {
+      if (typeof e.data[1] !== "number" || e.data[1] < 4 || e.data[1] > 8) {
         postMessage(["error", "AI level should be in the range of 3 to 7"]);
         break;
       }
