@@ -222,6 +222,7 @@ class FourInLine {
   checkExternalPlayer() {
     if (this._externalPlayer && this._currentTurn === this._externalPlayer) {
       this._active = false;
+      this.animating = true;
       this._externalPlayerFn(copyCircles(this._circles))
         .then(this.processMove.bind(this));
     }
