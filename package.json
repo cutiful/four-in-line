@@ -18,7 +18,7 @@
     "start": "npm-run-all --parallel serve watch",
     "watch": "rollup -c -w",
     "build": "rollup -c",
-    "serve": "ws -d public",
+    "serve": "ws -d public --blacklist '/.(.*)'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
