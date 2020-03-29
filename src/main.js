@@ -21,19 +21,103 @@ if (dpr !== 1) {
   ctx.scale(dpr, dpr);
 }
 
-let installedSw = false;
+let installedSw = false,
+  initializedGame = false;
 
 const game = new FourInLine(ctx, width, height);
 game.paused = true;
 game.installHandlers();
+
+const loadAi = level => {
+  const aiWorker = new Worker("./ai.js");
+  aiWorker.postMessage(["setLevel", level]);
+
+  game.setExternalPlayer(2, (circles) => {
+    return new Promise(resolve => {
+      const listener = e => {
+        if (e.data[0] !== "move")
+          return;
+
+        aiWorker.removeEventListener("message", listener);
+        resolve(e.data[1]);
+      };
+
+      aiWorker.addEventListener("message", listener);
+      aiWorker.postMessage(["move", circles]);
+    });
+  });
+}
+
+const aiLevelMenu = new Menu(ctx, width, height);
+aiLevelMenu.addOptions([
+  {
+    text: "Easy",
+    callback: () => {
+      loadAi(4);
+      aiLevelMenu.deactivate();
+      initializedGame = true;
+      game.paused = false;
+      game.draw();
+    }
+  },
+  {
+    text: "Medium",
+    callback: () => {
+      loadAi(6);
+      aiLevelMenu.deactivate();
+      initializedGame = true;
+      game.paused = false;
+      game.draw();
+    }
+  },
+  {
+    text: "Hard",
+    callback: () => {
+      loadAi(8);
+      aiLevelMenu.deactivate();
+      initializedGame = true;
+      game.paused = false;
+      game.draw();
+    }
+  }
+]);
+
+aiLevelMenu.onBeforeRedraw = game.draw.bind(game);
+
+const vsMenu = new Menu(ctx, width, height);
+vsMenu.addOptions([
+  {
+    text: "2 Players",
+    callback: () => {
+      vsMenu.deactivate();
+      initializedGame = true;
+      game.paused = false;
+      game.draw();
+    }
+  },
+  {
+    text: "Player vs Computer",
+    callback: () => {
+      vsMenu.deactivate();
+      aiLevelMenu.activate();
+    }
+  }
+]);
+
+vsMenu.onBeforeRedraw = game.draw.bind(game);
 
 const menu = new Menu(ctx, width, height);
 menu.addOptions([
   {
     text: "Play!",
     callback: () => {
-      menu.deactivate();
+      if (!initializedGame) {
+        menu.deactivate();
+        vsMenu.activate();
+        return;
+      }
 
+      menu.deactivate();
       game.paused = false;
       game.draw();
     }
@@ -106,6 +190,8 @@ menu.activate();
 
 document.addEventListener("keyup", e => {
   if (e.key == "Escape") {
+    if (!initializedGame) return;
+
     if (game.paused && menu.active) {
       menu.deactivate();
       game.paused = false;
