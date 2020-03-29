@@ -7,7 +7,7 @@ class Menu {
     this.containerWidth = width;
     this.containerHeight = height;
 
-    this.active = true;
+    this._active = false;
 
     this._options = [];
     this._beforeRedraw = null;
@@ -70,8 +70,12 @@ class Menu {
     this.ctx.restore();
   }
 
-  draw() {
-    if (this._beforeRedraw) this._beforeRedraw();
+  _draw() {
+    if (this._beforeRedraw)
+      this._beforeRedraw();
+    else
+      this.ctx.clearRect(0, 0, this.containerWidth, this.containerHeight);
+
     this.ctx.save();
 
     this.ctx.textBaseline = "middle";
@@ -96,15 +100,11 @@ class Menu {
   }
 
   _clickHandler(e) {
-    if (!this.active) return;
-
     if (this._selectedOption !== -1)
       this._renderedOptions[this._selectedOption].callback();
   }
 
   _mousemoveHandler(e) {
-    if (!this.active) return;
-
     let selected = -1;
     for (let i = 0; i < this._renderedOptions.length; i++) {
       const opt = this._renderedOptions[i];
@@ -119,11 +119,11 @@ class Menu {
 
     if (this._selectedOption !== selected) {
       this._selectedOption = selected;
-      this.draw.call(this);
+      this._draw.call(this);
     }
   }
 
-  installHandlers() {
+  _installHandlers() {
     const onclick = { on: "click", fn: this._clickHandler.bind(this) };
     const onmousemove = { on: "mousemove", fn: this._mousemoveHandler.bind(this) };
 
@@ -134,12 +134,27 @@ class Menu {
     this.ctx.canvas.addEventListener("mousemove", onmousemove.fn);
   }
 
-  removeHandlers() {
+  _removeHandlers() {
     for (const l of this._listeners) {
       this.ctx.canvas.removeEventListener(l.on, l.fn);
     }
 
     this._listeners = [];
+  }
+
+  get active() {
+    return this._active;
+  }
+
+  activate() {
+    this._installHandlers.call(this);
+    this._draw.call(this);
+    this._active = true;
+  }
+
+  deactivate() {
+    this._removeHandlers.call(this);
+    this._active = false;
   }
 }
 

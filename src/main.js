@@ -32,7 +32,8 @@ menu.addOptions([
   {
     text: "Play!",
     callback: () => {
-      menu.active = false;
+      menu.deactivate();
+
       game.paused = false;
       game.draw();
     }
@@ -40,34 +41,25 @@ menu.addOptions([
   {
     text: "Rules",
     callback: () => {
-      menu.active = false;
+      menu.deactivate();
       showHelp(canvasEl, ctx, width, height, rulesText, getSmallerTextSize(width))
-        .then(() => {
-          menu.active = true;
-          menu.draw();
-        });
+        .then(() => menu.activate());
     }
   },
   {
     text: "Credits",
     callback: () => {
-      menu.active = false;
+      menu.deactivate();
       showHelp(canvasEl, ctx, width, height, creditsText, getSmallerTextSize(width))
-        .then(() => {
-          menu.active = true;
-          menu.draw();
-        });
+        .then(() => menu.activate());
     }
   },
   {
     text: "Save for offline",
     callback: () => {
-      menu.active = false;
+      menu.deactivate();
 
-      const cb = () => {
-        menu.active = true;
-        menu.draw();
-      };
+      const cb = () => menu.activate();
 
       if (!('serviceWorker' in navigator)) {
         showHelp(canvasEl,
@@ -110,20 +102,18 @@ menu.addOptions([
 ]);
 
 menu.onBeforeRedraw = game.draw.bind(game);
-menu.installHandlers();
-menu.draw();
+menu.activate();
 
 document.addEventListener("keyup", e => {
   if (e.key == "Escape") {
     if (game.paused && menu.active) {
-      menu.active = false;
+      menu.deactivate();
       game.paused = false;
       game.draw();
     } else if (!game.paused) {
       game.waitForAnimation().then(() => {
         game.paused = true;
-        menu.active = true;
-        menu.draw();
+        menu.activate();
       });
     }
   }
