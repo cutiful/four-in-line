@@ -147,7 +147,7 @@ class FourInLine {
     const column = Math.ceil(e.offsetX / (this.width / columns));
     if (column !== this._selectedColumn) {
       this._selectedColumn = column;
-      if (!this._active || this.paused) return;
+      if ((!this._active && !this.animating) || this.paused) return;
 
       this.draw.call(this);
     }
