@@ -10,7 +10,7 @@ export function calculateBestMove(circles, depth) {
   const values = [];
   for (const col of availableMoves) {
     const newCircles = makeMove(circles, col, aiTeam);
-    const moveValue = alphabeta(newCircles, depth, -Infinity, Infinity, false);
+    const moveValue = alphabeta(newCircles, depth - 1, -Infinity, Infinity, false);
     values.push([col, moveValue]);
   }
 
