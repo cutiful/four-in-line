@@ -36,6 +36,15 @@ export default [
     plugins: plugins
   },
   {
+    input: "src/ai.js",
+    output: {
+      file: "public/ai.js",
+      format: "iife",
+      sourcemap: !production
+    },
+    plugins: plugins
+  },
+  {
     input: "src/sw.js",
     output: {
       file: "public/sw.js",
