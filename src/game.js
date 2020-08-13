@@ -117,7 +117,7 @@ class FourInLine {
           this._active = true;
 
         this.animating = false;
-        this.draw.call(this);
+        this.draw();
 
         if (this._active)
           setTimeout(this.checkExternalPlayer.bind(this));

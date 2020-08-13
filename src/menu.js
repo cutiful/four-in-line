@@ -19,12 +19,12 @@ class Menu {
 
   addOption(text, callback) {
     this._options.push({ text, callback });
-    this._prepare.call(this);
+    this._prepare();
   }
 
   addOptions(options) {
     for (const opt of options) {
-      this.addOption.call(this, opt.text, opt.callback);
+      this.addOption(opt.text, opt.callback);
     }
   }
 
@@ -147,13 +147,13 @@ class Menu {
   }
 
   activate() {
-    this._installHandlers.call(this);
-    this._draw.call(this);
+    this._installHandlers();
+    this._draw();
     this._active = true;
   }
 
   deactivate() {
-    this._removeHandlers.call(this);
+    this._removeHandlers();
     this._active = false;
   }
 }
