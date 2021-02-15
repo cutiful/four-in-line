@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Four-in-Line</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <style>
+      body, html {
+        box-sizing: border-box;
+        height: 100%;
+        margin: 0;
+        background: #82daff;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      .subcontainer {
+        box-sizing: border-box;
+        max-width: 600px;
+        width: 100%;
+      }
+
+      #game {
+        box-shadow: rgba(136, 136, 238, 0.4666666666666667) 0 0 20px 0;
+      }
+
+      noscript h3, canvas h3 {
+        font-family: monospace;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="subcontainer">
+        <noscript><h3>Sorry, but this game requires JavaScript to run!</h3></noscript>
+        <canvas id="game"><h3>(Four-in-Line game window should be here)</h3></canvas>
+      </div>
+    </div>
+
+    <script>
+      import("./bundle.js");
+      window.haveDynamicImport = true;
+    </script>
+    <script>
+      if (!window.haveDynamicImport) {
+        const systemJsLoaderTag = document.createElement("script");
+        systemJsLoaderTag.src = "https://unpkg.com/systemjs@2.0.0/dist/s.min.js";
+        systemJsLoaderTag.crossOrigin = "anonymous";
+        systemJsLoaderTag.integrity = "sha384-hERvafCnBvf0kzE113wEhYKbX0fGgdXkgOvQ4gtxMl8emjzwrHGdSqwfhxpmorUV";
+        systemJsLoaderTag.addEventListener("load", function () {
+          document.head.removeChild(systemJsLoaderTag);
+          System.import("./bundle-noimport.js");
+        });
+
+        document.head.appendChild(systemJsLoaderTag);
+      }
+    </script>
+  </body>
+</html>
